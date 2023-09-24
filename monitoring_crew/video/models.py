@@ -13,6 +13,7 @@ class Video(models.Model):
         upload_to='video/',
         validators=[FileExtensionValidator(allowed_extensions=['mp4'])]
     )
+    image = models.ImageField(upload_to='image/', blank=False)
     create_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
