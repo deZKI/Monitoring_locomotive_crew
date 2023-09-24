@@ -57,7 +57,7 @@ def make_pose_prediction(img, model, frame_width):
     img_ = img_.to(device).float()
     with torch.no_grad():
         output, _ = model(img_)
-    output = non_max_suppression_kpt(output, 0.25, 0.65, nc=model.yaml['nc'], nkpt=model.yaml['nkpt'], kpt_label=True)
+    output = non_max_suppression_kpt(output, 0.25, 0.65, nc=model.yaml['nc'], nkpt=17, kpt_label=True)
     output = output_to_keypoint(output)
     output = scale_pose_output(output, resized_shape, img.shape[0:2])
     return output

@@ -26,8 +26,6 @@ class Video(models.Model):
         detect_video(self.file.path)
 
 
-
-
 class TimeCodes(models.Model):
     video = models.ForeignKey(to=Video, on_delete=models.CASCADE)
     start = models.PositiveIntegerField(verbose_name='Начало в секундах')
