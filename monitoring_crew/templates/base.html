@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Masonry Responsive Template</title>
-  <meta name="description" content="">
+  <title>Контроль за вниманием локомотивной бригады</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
@@ -13,62 +12,46 @@
   <link rel="stylesheet" href="{% static 'css/templatemo-style.css' %}">
   <script src="{% static 'js/vendor/modernizr-2.6.2.min.js' %}"></script>
   <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
-
 </head>
 <body>
-
-<div id="loader-wrapper">
-  <div id="loader"></div>
-</div>
-
-<div class="content-bg"></div>
-<div class="bg-overlay"></div>
-
-<!-- SITE TOP -->
-<div class="site-top">
-  <div class="site-header clearfix">
-    <div class="container">
-      <a href="/" class="site-brand pull-left"><strong>PeiChai</strong>LOCOMOTIVE-Monitoring</a>
-      <div class="social-icons pull-right">
-
-      </div>
-    </div>
+  <div id="loader-wrapper">
+    <img width="150px" height="150px" src="../static/images/train.gif" alt="Логотип РЖД" />
   </div>
-</div>
 
-{% block content %}
-{% endblock content %}
+  <div class="content-bg"></div>
+  <div class="bg-overlay"></div>
 
-<footer class="site-footer">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <p class="copyright-text">Copyright &copy; PEI CHAI
-      </div>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__container">
+      <a class="header__link">
+        <img src="../static/images/logo.svg" />
+      </a>
     </div>
-  </div>
-</footer>
+  </header>
 
-<script src="{% static 'js/vendor/jquery-1.10.2.min.js' %}"></script>
-<script src="{% static 'js/min/plugins.min.js' %}"></script>
-<script src="{% static 'js/min/main.min.js' %}"></script>
+  {% block content %}
+  {% endblock content %}
 
-<script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
-<!-- Preloader -->
-<script type="text/javascript">
-    //<![CDATA[
-    $(window).load(function () { // makes sure the whole site is loaded
-        $('#loader').fadeOut(); // will first fade out the loading animation
-        $('#loader-wrapper').delay(350).fadeOut('slow'); // will fade out the white DIV that covers the website.
-        $('body').delay(350).css({'overflow-y': 'visible'});
+  <script src="{% static 'js/vendor/jquery-1.10.2.min.js' %}"></script>
+  <script src="{% static 'js/min/plugins.min.js' %}"></script>
+  <script src="{% static 'js/min/main.min.js' %}"></script>
+  <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+
+  <script type="text/javascript">
+    $(window).load(function () {
+      $('#loader').fadeOut();
+      $('#loader-wrapper').delay(500).fadeOut('slow');
+      $('body').delay(500).css({'overflow-y': 'visible'});
     })
-    document.addEventListener("DOMContentLoaded", function () {
-    // Инициализация видеоплеера с video.js
-    var player = videojs('videoPlayer');
-    var currentTime = 0;
 
-    // Функция для загрузки и отображения таймкодов
-    function loadAndDisplayTimecodes() {
+    document.addEventListener("DOMContentLoaded", function () {
+      // Инициализация видеоплеера с video.js
+      var player = videojs('videoPlayer');
+      var currentTime = 0;
+
+      // Функция для загрузки и отображения таймкодов
+      function loadAndDisplayTimecodes() {
         // Очистка списка таймкодов
         var timecodesListElement = document.getElementById('timecodesList');
         timecodesListElement.innerHTML = '';
@@ -77,32 +60,30 @@
         var videoId = '{{ video.id }}'; // Получение ID видео из Django-шаблона
         var url = '/api/get_timecodes/' + videoId; // Замените на URL вашего API
         fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                // Обработка полученных данных о таймкодах
-                data.forEach(function (timecode) {
-                    var listItem = document.createElement('li');
-                    listItem.textContent = 'Начало: ' + timecode.start + ' секунд, Конец: ' + timecode.end + ' секунд';
+          .then(response => response.json())
+          .then(data => {
+            // Обработка полученных данных о таймкодах
+            data.forEach(function (timecode) {
+              var listItem = document.createElement('li');
+              listItem.textContent = 'Начало: ' + timecode.start + ' секунд, Конец: ' + timecode.end + ' секунд';
 
-                    // Добавление обработчика события при клике на таймкод
-                    listItem.addEventListener('click', function () {
-                        player.currentTime(timecode.start); // Перемещение видеоплеера к началу таймкода
-                        player.play(); // Воспроизведение видео с этого момента
-                    });
+              // Добавление обработчика события при клике на таймкод
+              listItem.addEventListener('click', function () {
+                  player.currentTime(timecode.start); // Перемещение видеоплеера к началу таймкода
+                  player.play(); // Воспроизведение видео с этого момента
+              });
 
-                    timecodesListElement.appendChild(listItem);
-                });
-            })
-            .catch(error => {
-                console.error('Ошибка при загрузке таймкодов:', error);
+              timecodesListElement.appendChild(listItem);
             });
-    }
+          })
+          .catch(error => {
+            console.error('Ошибка при загрузке таймкодов:', error);
+          });
+      }
 
-    // Вызов функции для загрузки и отображения таймкодов
-    loadAndDisplayTimecodes();
-});
-
-    //]]>
-</script>
+      // Вызов функции для загрузки и отображения таймкодов
+      loadAndDisplayTimecodes();
+    });
+  </script>
 </body>
 </html>
